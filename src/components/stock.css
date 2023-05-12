@@ -1,0 +1,36 @@
+*{
+  
+  margin:0; padding:0;
+  box-sizing: border-box;
+  outline: none; border:none;
+ 
+
+  
+}
+.cotainerst{ 
+  
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+  padding:25px;
+  
+
+
+}
+
+.container-stock {
+  display: flex;
+  flex-wrap: wrap;  background: linear-gradient(90deg, #2ecc71 60%, #27ae60 40.1%);
+}
+
+
+.tab {
+
+ padding: 10px;
+ box-sizing: border-box;
+
+}
+
+  
+ 
