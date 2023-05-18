@@ -7,19 +7,21 @@ import Sim from './components/sim';
 import Stock  from './components/stock';
 import DetailsListeProduit  from './components/detailproduct';
 import DetailsListeProduitRecharge  from './components/detailcarterecharge';
-import LoginPage from './components/loginPage/index'
+import Authpage from './components/authpage/index'
+import PageNotFound  from './components/PageNotFound';
+
 import Navbar from './components/navbar';
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 
 
 
 
 
 function App() {
-
+  const isAuth = Boolean(useSelector((state) => state.token));
   const [respons , setresponse] = useState();
   // const isAuth = Boolean(useSelector((state) => state.token));
   const getData =(data1 , data2 , data3  )=> { 
@@ -36,17 +38,22 @@ function App() {
    <BrowserRouter> 
       <Routes>
      {/* creation des routes de l'application  */}
-     <Route path="/home" element={<Pdv />}/>
-     
-         <Route path="sim" element={<Sim />} />
-         <Route path="carte" element={<MyForm  />} />
-         <Route path="pdf" element={<PDF  />} />
-         <Route path="stock" element={<Stock  />} />
-         <Route path="detail" element={< DetailsListeProduit />} />
-         <Route path="detailcarte" element={< DetailsListeProduitRecharge />} />
-         <Route path="/form" element={<LoginPage />} />
+     <Route>
+            <Route path="/form" element={<Authpage />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+     <Route>
+         <Route path="/home" element={isAuth ? <Pdv /> : <Navigate to="/form" />} /> 
+         <Route path="/sim" element={isAuth ? <Sim /> : <Navigate to="/form" />} />
+         <Route path="/carte" element={isAuth ? <MyForm /> : <Navigate to="/form" />} />
+         <Route path="/pdf" element={isAuth ? <PDF /> : <Navigate to="/form" />} />
+         <Route path="/stock" element={isAuth ? <Stock /> : <Navigate to="/form" />} />
+         <Route path="/detail" element={isAuth ? <DetailsListeProduit /> : <Navigate to="/form" />} />
+         <Route path="/detailcarte" element={isAuth ? <DetailsListeProduitRecharge /> : <Navigate to="/form" />} />
+         <Route path="/detail" element={isAuth ? <DetailsListeProduit /> : <Navigate to="/form" />} />
+         <Route path="/detail" element={isAuth ? <DetailsListeProduit /> : <Navigate to="/form" />} />
           
-        
+      </Route>
         
        </Routes>
      </BrowserRouter>

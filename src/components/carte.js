@@ -1,12 +1,16 @@
-import { useState , useEffect , useCallback  } from "react";
+import { useState , useEffect , useCallback , useRef } from "react";
 import './sim.css';
 import { useNavigate } from "react-router-dom";
-
+import WebcamCapture from './OCR'
+import { createWorker } from "tesseract.js";
 import Navbar from "./navbar"
 
+
+import { BrowserMultiFormatReader } from '@zxing/library';
 function MyForm () {
     const navigate = useNavigate();
-	
+    const webcamRef = useRef(null);
+    
     const [name, setName] = useState("");
     const [prenom, setprenom] = useState("");
     const [adresse, setadresse] = useState("");
@@ -24,8 +28,13 @@ function MyForm () {
     
     const [IdCarte, setIdCarte] = useState("");
     const [isDataAvailable, setIsDataAvailable] = useState(false);
+    const [scannedNumber, setScannedNumber] = useState("");
     const values ={name ,prenom , adresse , myWilaya , DATE ,PI ,NumPI , ICCID}
-     async function fetchData() {
+     
+    
+    
+    
+    async function fetchData() {
           try {
             const response = await fetch('http://localhost:3001/carte'); // appeler la route backend créée ci-dessus
             const json = await response.json();
@@ -88,24 +97,25 @@ function MyForm () {
       const handleSubmit = (e) => {
        
         e.preventDefault();
-        if (!name || !prenom || !adresse || !myWilaya || !DATE || !PI || !NumPI || !ICCID     ) {
-          alert('Veuillez remplir tous les champs!');
-          setIsDataAvailable(false)
+        // if (!name || !prenom || !adresse || !myWilaya || !DATE || !PI || !NumPI || !ICCID     ) {
+        //   alert('Veuillez remplir tous les champs!');
+        //   setIsDataAvailable(false)
          
-        }
-        else {  fetch('http://localhost:3001/clientrecharge/detail/clientRecharge', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error(error));}
+        // }
+        //  fetch('http://localhost:3001/clientrecharge/detail/clientRecharge', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(values)
+        // })
+        // .then(response => response.json())
+        // .then(data => console.log(data))
+        // .catch(error => console.error(error));
        
     };
-
+   
+ 
   return( 
 
     <div> <Navbar />
@@ -114,31 +124,16 @@ function MyForm () {
 <form onSubmit={handleSubmit}>
 <h3> Informations CARTE DE RECHARGE </h3>
     <div className="row">
-        
+    <div>
+    <h1>Webcam OCR Example</h1>
+      <WebcamCapture/>
+    </div>
 
         <div className="col">
 
           
-
-            {/* <div className="inputBox">
-                <span>Nom :</span>
-                <input type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                />
-            </div> */}
-            {/* <div className="inputBox">
-                <span>Date de naissance :</span>
-                <input type="Date" 
-                value={DATE}
-                onChange={(e) => setDate(e.target.value)}/>
-            </div> */}
-            {/* <div className="inputBox">
-                <span> Adresse</span>
-                <input type="text" 
-                value={adresse}
-                onChange={(e) => setadresse(e.target.value)}/>
-            </div> */}
+      
+              
             <div className="inputBox">
                 <span>Type de carte:</span>
                 <select

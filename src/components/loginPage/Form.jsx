@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
  import { useDispatch } from "react-redux";
  import { setLogin } from "../../state";
  import { useTheme } from "@mui/material/styles";
+import { hrHR } from "@mui/material/locale";
  
 
 
@@ -26,7 +27,7 @@ import { useNavigate } from "react-router-dom";
   MSISDN: "",
  };
 
- const Formu = () => {
+ const Form = () => {
 
  const { palette } = useTheme();
   const dispatch = useDispatch();
@@ -34,7 +35,26 @@ import { useNavigate } from "react-router-dom";
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
 
- 
+  // const handleSubmit = async (values, onSubmitProps) => {
+  //   try {
+  //     const response = await axios.post("http://localhost:3001/login", values);
+  //     const data = response.data;
+
+  //     // Assuming the backend response contains a token and user information
+  //     const { token, user } = data;
+
+  //     // Dispatching the setLogin action to update the Redux store
+  //     dispatch(setLogin({ token, user }));
+
+  //     // Redirecting the user to the home page or another appropriate page
+  //     navigate("/home");
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     // Handle error and display an error message if needed
+  //   } finally {
+  //     onSubmitProps.setSubmitting(false);
+  //   }
+  // };
 
   const login = async (values, onSubmitProps) => {
    console.log(values);
@@ -134,4 +154,4 @@ import { useNavigate } from "react-router-dom";
    );
  };
 
- export default Formu;
+ export default Form;

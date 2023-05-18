@@ -1,159 +1,175 @@
 import React from 'react';
-
-import {Link , useLocation} from "react-router-dom"
+import { Page, Document, View, Text } from '@react-pdf/renderer';
 import './pdf.css';
-  
-function PDF ({data}) {
 
-    const location = useLocation();
-   
-  return (
-      <div className='d'> 
-       <div className=' p'> 
-       <div className=' pdv '> 
-       <h1 className='titre'> Contrat pdv</h1> 
-       </div>
-        <div className='top'> 
-         
-        <div className='contrat-effet '>
-          
-         <div className='date-remis'> <p> Date de remis : </p></div> 
-         <div className='contrat-offre '> <h4> Contrat de l'offre : </h4></div> 
-           <div className='M001'> <p> M001</p> </div>
-          
-           </div>
-           dfddf
-
-
-        </div>
-        <div className='sim-terminal'>
-        <span class="encadrer-un-contenu">Carte sim/terminal </span>
-
-        </div>
-
-        <div className='caret-sim-terminale '>
-          <div className='msisdn-numsim'> 
-             <div className='msisdn '> MSISDN:  </div> <div className='inputb'> <h5 className='hhh'> { location.state.MSISDN }</h5></div>
-
-             <div className='sim '> Numero SIM:  </div> <h5 className='hhh'>{  location.state.ICCID}</h5>
-           </div> 
-           <div className='type-terminal-mi '> 
-             <div className='type-terminal  '> type du terminal  ...  </div>
-             <div className='mi  '> mi   </div>
-           </div> 
-
-           
-
-
-
-        </div>
-        <div className='info-client'>
-        <span class="encadrer-un-contenu">Information client </span>
-          <div className='nom-date'> 
-             <div className='nom '> Nom:  </div> <div className='inputb'> <h5 className='hhh'> { location.state.name }</h5></div>
-
-             <div className='dn '> Date de naissance :  </div><h5 className='hhh'>{  location.state.DATE}</h5>
-           </div> 
-           <div className='prenom-lieux '> 
-             <div className='prenom  '> Prenom :</div> <div className='inputb'> <h5 className='hhh'> { location.state.prenom}</h5></div>
-             
-             <div className='lieux  '> Lieu de naissance:  </div>
-           </div> 
-
-           <div className='adr-wilaya-c '> 
-           <div className='adr  '>Adresse :   </div>  <div className='inputb'> <h5 className='hhh'> { location.state.adresse }</h5></div>
-             
-           <div className='wilaya '> Wilaya:  </div> <h5 className='hhh'>{  location.state.myWilaya }</h5> 
-            
-           </div> 
-           <div></div>
+function PDF({ name, prenom, adresse, myWilaya, DATE, PI, MSISDN, NumPI, ICCID }) {
  
-           <div className='confirmation  '> Confirmation:   </div>
-           <div className='numcontrat-email  '> 
-             <div className='numcontart  '>N° contrat: </div>
-             <div className='email '> Email:  </div>
-             
-           </div> 
-
-
-
-        </div>
-        <div className='pj'>
-        <span class="encadrer-un-contenu"> Piece jointe  </span>
-
-        
-
-        <div className='typecarte-num '>
-          <div className='msisdn-numsim'> 
-             <div className='typepi '> Type PI :  </div> <div className='inputb'> <h5 className='hhh'> { location.state.PI }</h5></div>
-             <div className='NUMPI '> N° PI :  </div> <h5 className='hhh'>{  location.state.NumPI}</h5>
-           </div> 
-           <div className='type-terminal-mi '> 
-             <div className='date '> Date  </div>
-             <div className='datea '> A   </div>
-           </div> 
-
-           </div>
-           
-
-
-
-
-
-
-
-        </div>
-
-
-        <div className='info-client'>
-        <span class="encadrer-un-contenu">Mondataire / tuteur  </span>
-          <div className='nom-date'> 
-             <div className='nom '> Nom:  </div>
-             <div className='dn '> Prenom:  </div>
-           </div> 
-           <div className='prenom-lieux '> 
-             <div className='prenom  '> Type PI :</div>
-             <div className='lieux  '> N° PI:    </div>
-           </div> 
-           <div className='type-terminal-mi '> 
-             <div className='date '> Date  </div>
-             <div className='datea '> A   </div>
-           </div> 
-           </div>
-
-        
-
-      
-   <div className='bottom'> 
-    <div className='signature-client '>
-    <div className='label'> <span className='cadre-cleint'> Cadre Client</span></div> 
-     
-     <p className='signature '> signature </p> 
-      
-    </div>
-    <div className='cachet-pdf'> 
-    <span className='label1'> Cadre reservé a l'agence</span>
-    <p className='cacher '> cacher a signature  </p>
-
-</div>
-
-
-   </div>
-
-        
-   </div>
-        
-
-
-
-
-
-
-
-       
-
-       </div>
-  )
+  return (
+    <Document>
+      <Page>
+        <View className='d'>
+          <View className='p'>
+            <View className='pdv'>
+              <Text className='titre'>Contrat pdv</Text>
+            </View>
+            <View className='top'>
+              <View className='contrat-effet'>
+                <View className='date-remis'>
+                  <Text>Date de remis :</Text>
+                </View>
+                <View className='contrat-offre'>
+                  <Text>Contrat de l'offre :</Text>
+                </View>
+                <View className='M001'>
+                  <Text>M001</Text>
+                </View>
+              </View>
+              dfddf
+            </View>
+            <View className='sim-terminal'>
+              <Text className="encadrer-un-contenu">Carte sim/terminal</Text>
+            </View>
+            <View className='caret-sim-terminale'>
+              <View className='msisdn-numsim'>
+                <View className='msisdn'>
+                  <Text>MSISDN:{MSISDN}</Text>
+                </View>
+                <View className='inputb'>
+                  <View className='hhh'></View>
+                </View>
+                <View className='sim'>
+                  <Text>Numero SIM:{ICCID}</Text>
+                </View>
+                <View className='hhh'></View>
+              </View>
+              <View className='type-terminal-mi'>
+                <View className='type-terminal'>
+                  <Text>type du terminal ...</Text>
+                </View>
+                <View className='mi'>
+                  <Text>mi</Text>
+                </View>
+              </View>
+            </View>
+            <View className='info-client'>
+              <Text className="encadrer-un-contenu">Information client</Text>
+              <View className='nom-date'>
+                <View className='nom'>
+                  <Text>Nom:{name}</Text>
+                </View>
+                <View className='inputb'>
+                  <View className='hhh'></View>
+                </View>
+                <View className='dn'>
+                  <Text>Date de naissance :{DATE}</Text>
+                </View>
+                <View className='hhh'></View>
+              </View>
+              <View className='prenom-lieux'>
+                <View className='prenom'>
+                  <Text>Prenom :{prenom}</Text>
+                </View>
+                <View className='inputb'>
+                  <View className='hhh'></View>
+                </View>
+                <View className='lieux'>
+                  <Text>Lieu de naissance:</Text>
+                </View>
+              </View>
+              <View className='adr-wilaya-c'>
+                <View className='adr'>
+                  <Text>Adresse :{adresse}</Text>
+                </View>
+                <View className='inputb'>
+                  <View className='hhh'></View>
+                </View>
+                <View className='wilaya'>
+                  <Text>Wilaya:{myWilaya}</Text>
+                </View>
+                <View className='hhh'></View>
+              </View>
+              <View></View>
+              <View className='confirmation'>
+                <Text>Confirmation:</Text>
+              </View>
+              <View className='numcontrat-email'>
+                <View className='numcontart'>
+                  <Text>N° contrat:</Text>
+                </View>
+                <View className='email'>
+                  <Text>Email:</Text>
+                </View>
+              </View>
+            </View>
+            <View className='pj'>
+              <Text className="encadrer-un-contenu">Piece jointe : {PI} </Text>
+              <View className='typecarte-num'>
+                <View className='msisdn-numsim'>
+                  <View className='typepi'>
+                    <Text>Type PI :{PI}</Text>
+                  </View>
+                  <View className='inputb'>
+                    <View className='hhh'></View>
+                  </View>
+                  <View className='NUMPI'>
+                    <Text>N° PI :{NumPI}</Text>
+                  </View>
+                  <View className='hhh'></View>
+                </View>
+                <View className='type-terminal-mi'>
+                  <View className='date'>
+                    <Text>Date</Text>
+                  </View>
+                  <View className='datea'>
+                    <Text>A</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View className='info-client'>
+              <Text className="encadrer-un-contenu">Mandataire / tuteur</Text>
+              <View className='nom-date'>
+                <View className='nom'>
+                  <Text>Nom:{name}</Text>
+                </View>
+                <View className='dn'>
+                  <Text>Prenom: {prenom}</Text>
+                </View>
+              </View>
+              <View className='prenom-lieux'>
+                <View className='prenom'>
+                  <Text>Type PI: {PI}</Text>
+                </View>
+                <View className='lieux'>
+                  <Text>N° PI: {NumPI}</Text>
+                </View>
+              </View>
+              <View className='type-terminal-mi'>
+                <View className='date'>
+                  <Text>Date</Text>
+                </View>
+                <View className='datea'>
+                  <Text>A</Text>
+                </View>
+              </View>
+            </View>
+            <View className='bottom'>
+              <View className='signature-client'>
+                <View className='label'>
+                  <Text className='cadre-cleint'>Cadre Client</Text>
+                </View>
+                <Text className='signature'>signature</Text>
+              </View>
+              <View className='cachet-pdf'>
+                <Text className='label1'>Cadre réservé à l'agence</Text>
+                <Text className='cacher'>cacher à signature</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
 };
-  
+
 export default PDF;

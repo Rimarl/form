@@ -1,37 +1,39 @@
 import { useState , useEffect , useCallback  } from "react";
 import './sim.css';
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Document, Page, pdfjs } from 'react-pdf';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import jsPDF from 'jspdf';
+import PDF from "./pdf";
 
+import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
 import Navbar from "./navbar"
 
 function Sim() {
     const navigate = useNavigate();
-	function gotoPDF(){
-		navigate("/pdf" , {state : {name , prenom , DATE ,myWilaya ,  adresse ,PI , MSISDN , NumPI , ICCID , MSISDNPDV , DATEV}  }  )
-	    axios.post("http://localhost:3001/" , )
-     
-    
-    };
+	
     const [name, setName] = useState("");
     const [prenom, setprenom] = useState("");
     const [adresse, setadresse] = useState("");
     const [myWilaya, setMyWilaya] = useState("");
-    const [Wilayapdv, setWilayapdv] = useState("---");
     const [DATE, setDate] = useState("");
 	const [DATEV, setDateV] = useState("");
     const [PI, setpi] = useState("");
     const [MSISDN, setMSISDN] = useState("");
-	const [MSISDNPDV, setMSISDNPDV] = useState("");
 	const [NumPI, setNumPI] = useState("");
 	const [ICCID, setICCID] = useState("");
     const [TypeSim, setTypeSim] = useState("");
     const [Sim, setSim] = useState([]);
     const [ListeICCID, setListeICCID] = useState([]);
-    const [ListeMSISDN, setListeMSISDN] = useState([]);
     const [IdSim, setIdSim] = useState("");
+    const [searchICCID, setSearchICCID] = useState('');
+    const [generatePDF, setGeneratePDF] = useState(false);
+
+
     const [isDataAvailable, setIsDataAvailable] = useState(false);
-    const values ={name ,prenom , adresse , myWilaya , DATE ,PI ,NumPI , ICCID}
+    const values ={name ,prenom , adresse , myWilaya , DATE ,PI ,NumPI , ICCID , MSISDN }
      async function fetchData() {
           try {
             const response = await fetch('http://localhost:3001/sim'); // appeler la route backend créée ci-dessus
@@ -70,9 +72,9 @@ function Sim() {
 
         const  fetchMSISDN = useCallback (async () => {
           try {
-            const response = await fetch('http://localhost:3001/sim/detailNumSim/'+ICCID); // appeler la route backend créée ci-dessus
+            const response = await fetch('http://localhost:3001/sim/detailNumSim'); // appeler la route backend créée ci-dessus
             const json = await response.json();
-            setListeMSISDN(json);
+            setMSISDN(json.numero);
              // mettre à jour le state avec les données
           } catch (err) {
             console.error(err);
@@ -103,7 +105,8 @@ function Sim() {
 
 
       const handleChangeMsisdn = (e) => { 
-        setMSISDN(e.target.value)
+    
+    setMSISDN(MSISDN)
       };
       const handleChangeiccid = (e) => {
       
@@ -111,12 +114,17 @@ function Sim() {
       
         
       };
-      
-
+      const options = ListeICCID.flatMap(item => item.StockSims).map((sim, index) => ({
+        value: sim?.num_serie,
+        label: sim?.num_serie
+      }));
+      const handleChangeICCID = (selectedOption) => {
+        setICCID(selectedOption.value);
+      };
       const handleSubmit = (e) => {
        
         e.preventDefault();
-        if (!name || !prenom || !adresse || !myWilaya || !DATE || !PI || !NumPI || !ICCID || !MSISDN     ) {
+        if (!name || !prenom || !adresse || !myWilaya || !DATE || !PI || !NumPI || !ICCID || !MSISDN   ) {
           alert('Veuillez remplir tous les champs!');
           setIsDataAvailable(false)
          
@@ -127,17 +135,40 @@ function Sim() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(values)
+            
         })
         .then(response => response.json())
-        .then(data => console.log(data))
+
+        .then(data => {
+          // Vérifier si la réponse du serveur indique que la création a réussi
+          if (data.success) {
+            setGeneratePDF(true);
+          } else {
+            
+            setGeneratePDF(true);
+          }
+        })
+          
         .catch(error => console.error(error));}
        
     };
+   
+    const handleCancel = () => {
+      navigate('/home');
+  };
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
   return( 
 
     <div> <Navbar />
     <div className="container1">
+    {generatePDF ? (
+                    <PDFDownloadLink document={<PDF {...values} />} fileName="contrat.pdf">
+                        {({ blob, url, loading, error }) =>
+                            loading ? 'Téléchargement en cours...' : 'Télécharger le PDF'
+                        }
+                    </PDFDownloadLink>
+                     ) : (
 
 <form onSubmit={handleSubmit}>
 <h3> Informations CARTE SIM </h3>
@@ -193,21 +224,26 @@ function Sim() {
             
             <div className="MSISDN">
                     {/* <span>MSISDN :</span> */}
-                    <select 
+                    <input 
                    
-                    onChange={handleChangeMsisdn} 
-                    value={MSISDN} 
-                    hidden= {true}
+                     
+                   defaultValue={MSISDN} 
+                   readOnly 
+                  hidden = {true}
+                  
+                    
+                    // hidden= {true}
                      disabled={!isDataAvailable}
               
                     >  
-                       <option value=""></option>
+                       {/* <option value=""></option> */}
                     
-      {ListeMSISDN.map((item , index) => (
+      {/* {ListeMSISDN.map((item , index) => (
        item.Msisdn && <option key={index} value={item.MSISDN}>{item.Msisdn.numero}</option>
-      ))}
+      ))} */}
      
-    </select>
+    </input>
+    
                 </div>
 
             <div className="msisdn-date">
@@ -314,21 +350,22 @@ function Sim() {
             <div className="inputBox">
                 
                 <div className="iccid"><span>ICCID :</span>
-                <select  onChange={handleChangeiccid}value={ICCID}
-                 disabled={!isDataAvailable}
-                >
-                <option ></option>
-                {ListeICCID.flatMap(item => item.StockSims).map((sim, index) => (
-        <option key={index} value={sim?.num_serie}>{sim?.num_serie}</option>
-    ))}
-    </select>
+                <Select
+        options={options}
+        onChange={handleChangeICCID}
+        value={options.find(option => option.value === ICCID)}
+        isDisabled={!isDataAvailable}
+        isSearchable  // Activer la recherche
+        placeholder="Rechercher un ICCID"
+      />
 
  
                  </div>
                 
             </div>
-                <button className="submit-btn"  disabled={!isDataAvailable} > Envoyer </button>
-                
+                <button className="submit-btn"  disabled={!isDataAvailable}  > Envoyer </button>
+                <button onClick={handleCancel}>Annuler</button>
+
         </div>
 
     </div>
@@ -336,7 +373,7 @@ function Sim() {
    
 
 </form>
-
+)}
 </div>    
     </div>
   )
